@@ -39,6 +39,20 @@
     ignore_errors: true
   - debug:
       msg: "{{ endpoint_events.stdout_lines }}"
+  - name: Describe pods in the kube-service-catalog namespace
+    command: >
+      {{ openshift_client_binary }} describe pods --config=/etc/origin/master/admin.kubeconfig -n kube-service-catalog
+    register: endpoint_describe_pods
+    ignore_errors: true
+  - debug:
+      msg: "{{ endpoint_describe_pods.stdout_lines }}"
+  - name: Describe services in the kube-service-catalog namespace
+    command: >
+      {{ openshift_client_binary }} describe services --config=/etc/origin/master/admin.kubeconfig -n kube-service-catalog
+    register: endpoint_describe_services
+    ignore_errors: true
+  - debug:
+      msg: "{{ endpoint_describe_services.stdout_lines }}"
   - name: Get pod logs
     command: >
       {{ openshift_client_binary }} logs daemonset/apiserver --tail=200 --config=/etc/origin/master/admin.kubeconfig -n kube-service-catalog
